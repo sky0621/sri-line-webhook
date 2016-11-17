@@ -1,0 +1,5 @@
+package: github.com/sky0621/sri-line-webhook
+import:
+- package: github.com/line/line-bot-sdk-go
+  subpackages:
+  - linebot
