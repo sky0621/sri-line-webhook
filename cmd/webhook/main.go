@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -45,7 +46,22 @@ func srrHandler(w http.ResponseWriter, r *http.Request) {
 			switch message := event.Message.(type) {
 			case *linebot.TextMessage:
 				log.Println(message)
-				newMsg := linebot.NewTextMessage(message.Text + "!?")
+				var newMsg *linebot.TextMessage
+				if "あぶない" == message.Text {
+					newMsg = linebot.NewTextMessage("ばしょをちずでおしえて！")
+				} else {
+					newMsg = linebot.NewTextMessage(message.Text + "!?")
+				}
+				if _, err = bot.ReplyMessage(event.ReplyToken, newMsg).Do(); err != nil {
+					log.Println(err)
+				}
+			case *linebot.LocationMessage:
+				log.Println(message)
+				lat := message.Latitude
+				lon := message.Longitude
+				addr := message.Address
+				retMsg := fmt.Sprintf("じゅうしょは、%s \n緯度：%f\n経度：%f\nだね。ありがとう。みんなにもおしえてあげるね。", addr, lat, lon)
+				newMsg := linebot.NewTextMessage(retMsg)
 				if _, err = bot.ReplyMessage(event.ReplyToken, newMsg).Do(); err != nil {
 					log.Println(err)
 				}
