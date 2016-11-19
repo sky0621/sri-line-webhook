@@ -31,7 +31,7 @@ func main() {
 }
 
 func srrHandler(w http.ResponseWriter, r *http.Request) {
-	ba, err := ioutil.readAll(r.Body)
+	ba, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		log.Println(err)
 	} else {
