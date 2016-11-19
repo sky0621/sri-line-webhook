@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 
@@ -30,6 +31,12 @@ func main() {
 }
 
 func srrHandler(w http.ResponseWriter, r *http.Request) {
+	ba, err := ioutil.readAll(r.Body)
+	if err != nil {
+		log.Println(err)
+	} else {
+		log.Println(string(ba))
+	}
 	events, err := bot.ParseRequest(r)
 	if err != nil {
 		log.Println(err)
