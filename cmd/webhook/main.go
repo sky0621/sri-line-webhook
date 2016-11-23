@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
 	"io"
@@ -54,7 +55,25 @@ func srrHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		applog.debugf("[srrHandler]", "RequestBody: %+v", string(ba))
 	}
-	events, err := bot.ParseRequest(r)
+	// events, err := bot.ParseRequest(r)
+	defer r.Body.Close()
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		applog.errorf("[srrHandler]", "Err: %+v", err)
+	}
+	applog.errorf("[srrHandler]", "channelSecret: x%+vs", r.Header.Get("X-Line-Signature"))
+	// if !validateSignature(channelSecret, r.Header.Get("X-Line-Signature"), body) {
+	// 	return nil, ErrInvalidSignature
+	// }
+
+	request := &struct {
+		Events []*linebot.Event `json:"events"`
+	}{}
+	if err = json.Unmarshal(body, request); err != nil {
+		applog.errorf("[srrHandler]", "Err: %+v", err)
+	}
+	events, err := request.Events, nil
+
 	if err != nil {
 		applog.errorf("[srrHandler]", "Err: %+v", err)
 		// if err == linebot.ErrInvalidSignature {
