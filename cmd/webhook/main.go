@@ -48,6 +48,7 @@ func srrHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		applog.errorf("[srrHandler]", "Err: %+v", err)
 	} else {
+		applog.debugf("[srrHandler]", "X-Line-Signature: ", r.Header.Get("X-Line-Signature"))
 		for k, v := range r.Header {
 			applog.debugf("[srrHandler]", "RequestHeader: key[%+v], value[%+v]\n", k, v)
 		}
@@ -87,6 +88,8 @@ func srrHandler(w http.ResponseWriter, r *http.Request) {
 				retMsg := fmt.Sprintf("じゅうしょは、%s \n緯度：%f\n経度：%f\nだね。ありがとう。みんなにもおしえてあげるね。", addr, lat, lon)
 				applog.debugf("[srrHandler]", "retMsg: %s", retMsg)
 				newMsg := linebot.NewTextMessage(retMsg)
+				repMsg := bot.ReplyMessage(event.ReplyToken, newMsg)
+				applog.errorf("[srrHandler]", "replyMessage: %+v", repMsg)
 				if _, err = bot.ReplyMessage(event.ReplyToken, newMsg).Do(); err != nil {
 					applog.errorf("[srrHandler]", "Err: %+v", err)
 				}
