@@ -48,7 +48,10 @@ func srrHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		applog.errorf("[srrHandler]", "Err: %+v", err)
 	} else {
-		applog.debugf("[srrHandler]", "ba: %+v", string(ba))
+		for k, v := range r.Header {
+			applog.debugf("[srrHandler]", "RequestHeader: key[%+v], value[%+v]\n", k, v)
+		}
+		applog.debugf("[srrHandler]", "RequestBody: %+v", string(ba))
 	}
 	events, err := bot.ParseRequest(r)
 	if err != nil {
