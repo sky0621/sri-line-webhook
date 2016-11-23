@@ -65,11 +65,14 @@ func srrHandler(w http.ResponseWriter, r *http.Request) {
 		// return
 	}
 
+	applog.debug("[srrHandler]", "Event for start")
+
 	for _, event := range events {
+		applog.debugf("[srrHandler]", "Event Type: %+v", event.Type)
 		if event.Type == linebot.EventTypeMessage {
 			switch message := event.Message.(type) {
 			case *linebot.TextMessage:
-				log.Println(message)
+				applog.debugf("[srrHandler]", "Event Message Type: %+v", message)
 				var newMsg *linebot.TextMessage
 				if "あぶない" == message.Text {
 					newMsg = linebot.NewTextMessage("ばしょをちずでおしえて！")
@@ -77,11 +80,14 @@ func srrHandler(w http.ResponseWriter, r *http.Request) {
 					newMsg = linebot.NewTextMessage(message.Text + "!?")
 				}
 				applog.debugf("[srrHandler]", "newMsg: %s", newMsg)
+
+				repMsg := bot.ReplyMessage(event.ReplyToken, newMsg)
+				applog.errorf("[srrHandler]", "replyMessage: %+v", repMsg)
 				if _, err = bot.ReplyMessage(event.ReplyToken, newMsg).Do(); err != nil {
 					applog.errorf("[srrHandler]", "Err: %+v", err)
 				}
 			case *linebot.LocationMessage:
-				log.Println(message)
+				applog.debugf("[srrHandler]", "Event Message Type: %+v", message)
 				lat := message.Latitude
 				lon := message.Longitude
 				addr := message.Address
