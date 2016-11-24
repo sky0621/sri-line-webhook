@@ -115,6 +115,13 @@ func ParseRequest(channelSecret string, r *http.Request) ([]*linebot.Event, erro
 		return nil, linebot.ErrInvalidSignature
 	}
 	applog.debug("[ParseRequest]", "valiate ok")
+	for k, v := range r.Header {
+		applog.debugf("[ParseRequest]", "RequestHeader: key[%+v], value[%+v]\n", k, v)
+	}
+
+	applog.debugf("[ParseRequest]", "!!! ~~~ !!! ~~~ !!!")
+	applog.debugf("[ParseRequest]", "RequestBody: %+v", string(body))
+	applog.debugf("[ParseRequest]", "!!! ~~~ !!! ~~~ !!!")
 
 	request := &struct {
 		Events []*linebot.Event `json:"events"`
@@ -131,7 +138,7 @@ func ParseRequest(channelSecret string, r *http.Request) ([]*linebot.Event, erro
 
 func validateSignature(channelSecret, signature string, body []byte) bool {
 	decoded, err := base64.StdEncoding.DecodeString(signature)
-	applog.debugf("[validateSignature]", "decoded: %s", decoded)
+	applog.debugf("[validateSignature]", "decoded: %s", string(decoded))
 	if err != nil {
 		return false
 	}
