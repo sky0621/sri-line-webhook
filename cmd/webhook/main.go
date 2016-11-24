@@ -138,7 +138,7 @@ func ParseRequest(channelSecret string, r *http.Request) ([]*linebot.Event, erro
 
 func validateSignature(channelSecret, signature string, body []byte) bool {
 	decoded, err := base64.StdEncoding.DecodeString(signature)
-	applog.debugf("[validateSignature]", "decoded: %s", string(decoded))
+	// applog.debugf("[validateSignature]", "decoded: %s", string(decoded))
 	if err != nil {
 		return false
 	}
