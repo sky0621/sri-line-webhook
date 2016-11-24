@@ -119,9 +119,9 @@ func ParseRequest(channelSecret string, r *http.Request) ([]*linebot.Event, erro
 		applog.debugf("[ParseRequest]", "RequestHeader: key[%+v], value[%+v]\n", k, v)
 	}
 
-	applog.debugf("[ParseRequest]", "!!! ~~~ !!! ~~~ !!!")
+	applog.debugf("[ParseRequest]", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
 	applog.debugf("[ParseRequest]", "RequestBody: %+v", string(body))
-	applog.debugf("[ParseRequest]", "!!! ~~~ !!! ~~~ !!!")
+	applog.debugf("[ParseRequest]", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
 
 	request := &struct {
 		Events []*linebot.Event `json:"events"`
@@ -129,9 +129,9 @@ func ParseRequest(channelSecret string, r *http.Request) ([]*linebot.Event, erro
 	if err = json.Unmarshal(body, request); err != nil {
 		return nil, err
 	}
-	applog.debugf("[ParseRequest]", "==##==##==##==##==##==##==##==##==")
+	applog.debugf("[ParseRequest]", "llllllllllllllllllllllllllllllllllllllllllllllllllllllllllll")
 	applog.debugf("[ParseRequest]", "request: %+v", request)
-	applog.debugf("[ParseRequest]", "==##==##==##==##==##==##==##==##==")
+	applog.debugf("[ParseRequest]", "llllllllllllllllllllllllllllllllllllllllllllllllllllllllllll")
 
 	return request.Events, nil
 }
