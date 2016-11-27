@@ -144,7 +144,7 @@ func validateSignature(channelSecret, signature string, body []byte) bool {
 	}
 	hash := hmac.New(sha256.New, []byte(channelSecret))
 	hash.Write(body)
-	applog.debugf("[validateSignature]", "hash.Sum(nil): %s", hash.Sum(nil))
+	// applog.debugf("[validateSignature]", "hash.Sum(nil): %s", hash.Sum(nil))
 	return hmac.Equal(decoded, hash.Sum(nil))
 }
 
